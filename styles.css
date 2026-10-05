@@ -1,0 +1,86 @@
+:root {
+  color-scheme: light;
+  --canvas: #f9fafb;
+  --ink: #0f1521;
+  --muted: #a6aebe;
+  --selection: #0066ff;
+  --selection-ink: #f9fafb;
+  font-family: "InterDisplay", "Inter", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+  background: var(--canvas);
+}
+
+body {
+  color: var(--ink);
+}
+
+::selection {
+  color: var(--selection-ink);
+  background: var(--selection);
+}
+
+::-moz-selection {
+  color: var(--selection-ink);
+  background: var(--selection);
+}
+
+.introduction {
+  display: flex;
+  min-height: 100vh;
+  min-height: 100svh;
+  align-items: center;
+  padding: 3.5rem;
+}
+
+.introduction__content {
+  display: flex;
+  width: min(31.25rem, 100%);
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+h1,
+p {
+  margin: 0;
+}
+
+h1,
+.role,
+.bio {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.role {
+  color: var(--muted);
+}
+
+@media (max-width: 767px) {
+  .introduction {
+    padding: 2rem;
+  }
+}
+
+@media (forced-colors: active) {
+  .role {
+    color: CanvasText;
+  }
+}
