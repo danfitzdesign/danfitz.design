@@ -1,0 +1,27 @@
+name: Add portrait asset
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  add-portrait:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Download the Figma portrait
+        run: |
+          mkdir -p assets
+          curl --fail --location "https://www.figma.com/api/mcp/asset/6baab888-5057-4b29-886e-d5d7513c24e9.png" --output assets/dan-fitzsimmons.png
+
+      - name: Commit the portrait
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/dan-fitzsimmons.png
+          git diff --cached --quiet || git commit -m "Add portrait asset"
+          git push
