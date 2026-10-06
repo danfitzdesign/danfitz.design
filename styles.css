@@ -5,9 +5,12 @@
   --muted: #a6aebe;
   --button-ink: #586068;
   --button-border: #a6aebe;
-  --button-border-hover: #7f8793;
+  --button-border-hover: #3276ff;
+  --button-ink-hover: #0049b6;
   --button-top: #f8faff;
   --button-bottom: #a6aebe;
+  --button-hover-top: #e0eaff;
+  --button-hover-bottom: #4986ff;
   --selection: #0066ff;
   --selection-ink: #f9fafb;
   font-family: "InterDisplay", "Inter", -apple-system, BlinkMacSystemFont,
@@ -174,6 +177,7 @@ h1,
   transition:
     border-color 500ms cubic-bezier(0.25, 1, 0.5, 1),
     box-shadow 500ms cubic-bezier(0.25, 1, 0.5, 1),
+    color 500ms cubic-bezier(0.25, 1, 0.5, 1),
     opacity 140ms ease-out,
     transform 140ms ease-out;
 }
@@ -182,7 +186,17 @@ h1,
   position: absolute;
   inset: -0.5rem;
   border-radius: inherit;
-  background: rgb(0 0 0 / 10%);
+  background:
+    linear-gradient(
+      180deg,
+      var(--button-hover-top) 0%,
+      var(--button-hover-bottom) 100%
+    ),
+    linear-gradient(
+      180deg,
+      var(--button-top) 0%,
+      var(--button-bottom) 100%
+    );
   content: "";
   filter: blur(0.625rem);
   opacity: 0;
@@ -205,21 +219,31 @@ h1,
 }
 
 .linkedin-link:active {
-  opacity: 0.5;
-  transform: scale(0.95);
+  border-color: var(--button-border-hover);
+  color: var(--button-ink-hover);
+  opacity: 0.6;
+  transform: scale(0.92);
+  transition-duration: 80ms;
+}
+
+.linkedin-link:active::before {
+  filter: blur(0);
+  opacity: 1;
+  transform: scale(1);
   transition-duration: 80ms;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .linkedin-link:hover {
     border-color: var(--button-border-hover);
+    color: var(--button-ink-hover);
     box-shadow:
       0 15px 15px rgb(93 171 255 / 5%),
-      0 7px 7px rgb(87 87 87 / 8%),
-      0 4px 4px rgb(87 87 87 / 8%),
-      0 2px 2px rgb(87 87 87 / 10%),
+      0 7px 7px rgb(93 171 255 / 8%),
+      0 4px 4px rgb(93 171 255 / 8%),
+      0 2px 2px rgb(93 171 255 / 10%),
       0 1px 1px rgb(93 171 255 / 10%),
-      0 0 3px rgb(92 92 92 / 5%),
+      0 0 3px rgb(93 171 255 / 5%),
       inset 2px 2px 2px rgb(255 255 255 / 50%),
       inset 0 4px 4px rgb(255 255 255 / 25%);
   }
