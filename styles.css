@@ -6,6 +6,8 @@
   --button-ink: #586068;
   --button-border: #a6aebe;
   --button-border-hover: #3276ff;
+  --button-stroke-hover-top: #3276ff;
+  --button-stroke-hover-bottom: #e0eaff;
   --button-ink-hover: #0049b6;
   --button-top: #f8faff;
   --button-bottom: #a6aebe;
@@ -208,6 +210,36 @@ h1,
     transform 500ms cubic-bezier(0.25, 1, 0.5, 1);
 }
 
+.linkedin-link::after {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    180deg,
+    var(--button-stroke-hover-top) 0%,
+    var(--button-stroke-hover-bottom) 100%
+  );
+  content: "";
+  filter: blur(0.25rem);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.94);
+  transition:
+    filter 500ms cubic-bezier(0.25, 1, 0.5, 1),
+    opacity 500ms cubic-bezier(0.25, 1, 0.5, 1),
+    transform 500ms cubic-bezier(0.25, 1, 0.5, 1);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+}
+
 .linkedin-link span {
   position: relative;
   z-index: 1;
@@ -221,12 +253,19 @@ h1,
 .linkedin-link:active {
   border-color: var(--button-border-hover);
   color: var(--button-ink-hover);
-  opacity: 0.6;
+  opacity: 0.7;
   transform: scale(0.92);
   transition-duration: 80ms;
 }
 
 .linkedin-link:active::before {
+  filter: blur(0);
+  opacity: 1;
+  transform: scale(1);
+  transition-duration: 80ms;
+}
+
+.linkedin-link:active::after {
   filter: blur(0);
   opacity: 1;
   transform: scale(1);
@@ -253,6 +292,12 @@ h1,
     opacity: 1;
     transform: scale(1);
   }
+
+  .linkedin-link:hover::after {
+    filter: blur(0);
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @media (max-width: 767px) {
@@ -264,7 +309,8 @@ h1,
 
 @media (prefers-reduced-motion: reduce) {
   .linkedin-link,
-  .linkedin-link::before {
+  .linkedin-link::before,
+  .linkedin-link::after {
     transition-duration: 0.01ms;
   }
 }
