@@ -73,9 +73,7 @@ a {
     0 4px 4px rgb(93 171 255 / 8%),
     0 2px 2px rgb(87 87 87 / 10%),
     0 1px 1px rgb(93 171 255 / 10%),
-    0 0 3px 2.447px rgb(92 92 92 / 5%),
-    inset 4px 4px 8px rgb(255 255 255 / 50%),
-    inset 0 4px 4px rgb(255 255 255 / 25%);
+    0 0 3px 2.447px rgb(92 92 92 / 5%);
 }
 
 .portrait::after {
@@ -96,8 +94,8 @@ a {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: center bottom;
+  object-fit: contain;
+  object-position: center;
 }
 
 .introduction__copy {
