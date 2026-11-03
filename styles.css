@@ -218,8 +218,7 @@ h1,
 }
 
 .contact-trigger:focus-visible,
-.contact-email:focus-visible,
-.copy-button:focus-visible {
+.contact-drawer:focus-visible {
   outline: 3px solid var(--selection);
   outline-offset: 3px;
 }
@@ -229,7 +228,7 @@ h1,
   z-index: 1;
   width: 0;
   height: 2.6875rem;
-  overflow: clip;
+  overflow: visible;
   opacity: 0;
   pointer-events: none;
   transform: translateX(-0.875rem) scaleX(0.94);
@@ -261,6 +260,7 @@ h1,
   padding: 0 1rem;
   border: 1px solid rgb(166 174 190 / 56%);
   border-radius: 100px;
+  appearance: none;
   background: linear-gradient(180deg, rgb(248 250 255 / 24%) 0%, rgb(166 174 190 / 24%) 100%);
   box-shadow:
     0 15px 15px rgb(93 171 255 / 5%),
@@ -271,7 +271,17 @@ h1,
     0 0 3px rgb(93 171 255 / 5%),
     inset 2px 2px 2px rgb(255 255 255 / 32%),
     inset 0 4px 4px rgb(255 255 255 / 16%);
-  transition: width 280ms var(--spring);
+  clip-path: inset(-2rem 100% -2rem -2rem round 100px);
+  color: var(--button-ink);
+  cursor: pointer;
+  text-align: left;
+  transition:
+    width 280ms var(--spring),
+    clip-path 620ms var(--spring);
+}
+
+.contact-control.is-open .contact-drawer {
+  clip-path: inset(-2rem -2rem -2rem -2rem round 100px);
 }
 
 .contact-control.is-copied .contact-drawer {
@@ -301,12 +311,7 @@ h1,
   white-space: nowrap;
 }
 
-.contact-email:hover {
-  text-decoration: underline;
-  text-underline-offset: 0.15em;
-}
-
-.copy-button {
+.copy-tag {
   display: inline-flex;
   width: 1.5625rem;
   height: 0.8125rem;
@@ -316,20 +321,18 @@ h1,
   padding: 0 0.3125rem;
   border: 0.5px solid var(--button-ink);
   border-radius: 100px;
-  appearance: none;
   background: linear-gradient(180deg, #fff 0%, rgb(255 255 255 / 0%) 100%);
   color: rgb(88 96 104 / 72%);
-  cursor: pointer;
   transition:
     width 280ms var(--spring),
     transform 160ms var(--spring);
 }
 
-.copy-button:active {
+.contact-drawer:active .copy-tag {
   transform: scale(0.9);
 }
 
-.contact-control.is-copied .copy-button {
+.contact-control.is-copied .copy-tag {
   width: 1.9375rem;
 }
 
@@ -363,7 +366,7 @@ h1,
   .contact-trigger,
   .contact-drawer-clip,
   .contact-drawer,
-  .copy-button {
+  .copy-tag {
     animation: none;
     transition-duration: 0.01ms;
   }
@@ -373,5 +376,5 @@ h1,
   .role { color: CanvasText; }
   .contact-trigger,
   .contact-drawer,
-  .copy-button { border-color: ButtonText; }
+  .copy-tag { border-color: ButtonText; }
 }
