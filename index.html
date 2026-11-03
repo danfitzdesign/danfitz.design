@@ -31,9 +31,7 @@
         <div class="contact-drawer-clip" id="contact-drawer" aria-hidden="true" inert>
           <button class="contact-drawer" type="button" aria-label="Copy dan@danfitz.design to the clipboard">
             <span class="contact-email">dan@danfitz.design</span>
-            <span class="copy-tag" aria-hidden="true">
-              <span class="copy-label">Copy</span>
-            </span>
+            <span class="copy-label" aria-hidden="true">Copy</span>
           </button>
         </div>
         <p class="sr-only" aria-live="polite" data-copy-status></p>
@@ -49,41 +47,32 @@
         const copyLabel = control.querySelector(".copy-label");
         const copyStatus = control.querySelector("[data-copy-status]");
         const email = "dan@danfitz.design";
-        const closeDelay = 5000;
         const motionReduced = window.matchMedia("(prefers-reduced-motion: reduce)");
-        let closeTimer;
         let closingTimer;
         let resetTimer;
         let hoverLocked = false;
 
-        const clearTimers = () => {
-          window.clearTimeout(closeTimer);
+        const clearClosingTimer = () => {
           window.clearTimeout(closingTimer);
         };
 
-        const scheduleClose = () => {
-          window.clearTimeout(closeTimer);
-          closeTimer = window.setTimeout(() => closeDrawer("timeout"), closeDelay);
-        };
-
         const openDrawer = () => {
-          clearTimers();
+          if (hoverLocked) return;
+          clearClosingTimer();
           control.classList.remove("is-closing");
           control.classList.add("is-open");
           trigger.setAttribute("aria-expanded", "true");
           drawerClip.setAttribute("aria-hidden", "false");
           drawerClip.inert = false;
-          scheduleClose();
         };
 
         const closeDrawer = (reason = "manual") => {
-          window.clearTimeout(closeTimer);
           control.classList.remove("is-open");
           control.classList.add("is-closing");
           trigger.setAttribute("aria-expanded", "false");
           drawerClip.setAttribute("aria-hidden", "true");
           drawerClip.inert = true;
-          if (reason === "timeout" && trigger.matches(":hover")) hoverLocked = true;
+          if (reason === "copied") hoverLocked = true;
           closingTimer = window.setTimeout(
             () => control.classList.remove("is-closing"),
             motionReduced.matches ? 0 : 640,
@@ -105,18 +94,19 @@
           field.remove();
         };
 
-        trigger.addEventListener("pointerenter", (event) => {
+        control.addEventListener("pointerenter", (event) => {
           if (event.pointerType === "mouse" && !hoverLocked) openDrawer();
         });
-        trigger.addEventListener("pointerleave", () => { hoverLocked = false; });
+        control.addEventListener("pointerleave", (event) => {
+          if (event.pointerType !== "mouse") return;
+          hoverLocked = false;
+          closeDrawer("hover-leave");
+        });
         trigger.addEventListener("focus", openDrawer);
         trigger.addEventListener("click", openDrawer);
-        drawerClip.addEventListener("pointerenter", () => window.clearTimeout(closeTimer));
-        drawerClip.addEventListener("pointerleave", scheduleClose);
-        drawerClip.addEventListener("focusin", () => window.clearTimeout(closeTimer));
-        drawerClip.addEventListener("focusout", () => {
+        control.addEventListener("focusout", () => {
           window.setTimeout(() => {
-            if (!drawerClip.contains(document.activeElement)) scheduleClose();
+            if (!control.contains(document.activeElement)) closeDrawer("focus-leave");
           }, 0);
         });
 
@@ -124,7 +114,6 @@
           try {
             await copyWithFallback();
             window.clearTimeout(resetTimer);
-            window.clearTimeout(closeTimer);
             control.classList.add("is-copied");
             drawer.classList.remove("is-bouncing");
             void drawer.offsetWidth;
