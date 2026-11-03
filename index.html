@@ -94,13 +94,15 @@
           field.remove();
         };
 
-        control.addEventListener("pointerenter", (event) => {
+        trigger.addEventListener("pointerenter", (event) => {
           if (event.pointerType === "mouse" && !hoverLocked) openDrawer();
         });
         control.addEventListener("pointerleave", (event) => {
           if (event.pointerType !== "mouse") return;
           hoverLocked = false;
-          closeDrawer("hover-leave");
+          if (control.classList.contains("is-open")) {
+            closeDrawer("hover-leave");
+          }
         });
         trigger.addEventListener("focus", openDrawer);
         trigger.addEventListener("click", openDrawer);
