@@ -198,8 +198,7 @@ h1,
     transform 180ms var(--spring);
 }
 
-.contact-control.is-open .contact-trigger,
-.contact-control.is-closing .contact-trigger {
+.contact-control.is-open .contact-trigger {
   border-color: var(--button-border-active);
   background: linear-gradient(180deg, var(--button-active-top) 0%, var(--button-active-bottom) 100%);
   box-shadow:
