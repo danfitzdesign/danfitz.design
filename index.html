@@ -14,27 +14,29 @@
   <body>
     <main class="introduction" aria-labelledby="name">
       <div class="introduction__content">
-        <div class="portrait" aria-hidden="true">
-          <img src="./assets/Dan.png" alt="" width="48" height="48" />
+        <div class="profile">
+          <div class="portrait" aria-hidden="true">
+            <img src="./assets/Dan.png" alt="" width="40" height="40" />
+          </div>
+          <header class="identity">
+            <h1 id="name">Dan Fitzsimmons</h1>
+            <p class="role">Leading Brand Design at GoCardless</p>
+          </header>
         </div>
-        <header class="identity">
-          <h1 id="name">Dan Fitzsimmons</h1>
-          <p class="role">Leading Brand Design at GoCardless</p>
-        </header>
         <p class="bio">I specialise in building adaptable brand systems that help make complex ideas<br />clear and compelling.</p>
-      </div>
 
-      <div class="contact-control" data-contact>
-        <button class="contact-trigger" type="button" aria-expanded="false" aria-controls="contact-drawer">
-          <span>Contact</span>
-        </button>
-        <div class="contact-drawer-clip" id="contact-drawer" aria-hidden="true" inert>
-          <button class="contact-drawer" type="button" aria-label="Copy dan@danfitz.design to the clipboard">
-            <span class="contact-email">dan@danfitz.design</span>
-            <span class="copy-label" aria-hidden="true">Copy</span>
+        <div class="contact-control" data-contact>
+          <button class="contact-trigger" type="button" aria-expanded="false" aria-controls="contact-drawer">
+            <span>Contact</span>
           </button>
+          <div class="contact-drawer-clip" id="contact-drawer" aria-hidden="true" inert>
+            <button class="contact-drawer" type="button" aria-label="Copy dan@danfitz.design to the clipboard">
+              <span class="contact-email">dan@danfitz.design</span>
+              <span class="copy-label" aria-hidden="true">Copy</span>
+            </button>
+          </div>
+          <p class="sr-only" aria-live="polite" data-copy-status></p>
         </div>
-        <p class="sr-only" aria-live="polite" data-copy-status></p>
       </div>
     </main>
 
