@@ -82,7 +82,9 @@ a {
 .profile {
   display: flex;
   width: 100%;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
   gap: 1rem;
 }
 
@@ -133,7 +135,7 @@ p {
   display: flex;
   min-width: 0;
   width: 100%;
-  flex: 1 0 0;
+  flex: 0 0 auto;
   flex-direction: column;
   align-items: flex-start;
   gap: 0.5rem;
