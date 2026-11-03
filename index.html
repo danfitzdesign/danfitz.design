@@ -29,12 +29,12 @@
           <span>Contact</span>
         </button>
         <div class="contact-drawer-clip" id="contact-drawer" aria-hidden="true" inert>
-          <div class="contact-drawer">
-            <a class="contact-email" href="mailto:dan@danfitz.design">dan@danfitz.design</a>
-            <button class="copy-button" type="button" aria-label="Copy dan@danfitz.design to the clipboard">
+          <button class="contact-drawer" type="button" aria-label="Copy dan@danfitz.design to the clipboard">
+            <span class="contact-email">dan@danfitz.design</span>
+            <span class="copy-tag" aria-hidden="true">
               <span class="copy-label">Copy</span>
-            </button>
-          </div>
+            </span>
+          </button>
         </div>
         <p class="sr-only" aria-live="polite" data-copy-status></p>
       </div>
@@ -46,7 +46,6 @@
         const trigger = control.querySelector(".contact-trigger");
         const drawerClip = control.querySelector(".contact-drawer-clip");
         const drawer = control.querySelector(".contact-drawer");
-        const copyButton = control.querySelector(".copy-button");
         const copyLabel = control.querySelector(".copy-label");
         const copyStatus = control.querySelector("[data-copy-status]");
         const email = "dan@danfitz.design";
@@ -121,7 +120,7 @@
           }, 0);
         });
 
-        copyButton.addEventListener("click", async () => {
+        drawer.addEventListener("click", async () => {
           try {
             await copyWithFallback();
             window.clearTimeout(resetTimer);
