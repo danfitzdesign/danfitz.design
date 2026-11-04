@@ -106,8 +106,15 @@
             closeDrawer("hover-leave");
           }
         });
-        trigger.addEventListener("focus", openDrawer);
+        trigger.addEventListener("focus", () => {
+          if (trigger.matches(":focus-visible")) openDrawer();
+        });
         trigger.addEventListener("click", () => {
+          if (control.classList.contains("is-open")) {
+            hoverLocked = false;
+            closeDrawer("dismiss");
+            return;
+          }
           hoverLocked = false;
           openDrawer();
         });
@@ -140,6 +147,13 @@
           } catch {
             copyStatus.textContent = "The email address could not be copied.";
           }
+        });
+
+        document.addEventListener("pointerdown", (event) => {
+          if (!control.classList.contains("is-open")) return;
+          if (drawer.contains(event.target) || trigger.contains(event.target)) return;
+          hoverLocked = false;
+          closeDrawer("dismiss");
         });
 
         document.addEventListener("keydown", (event) => {
