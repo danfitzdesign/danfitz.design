@@ -68,13 +68,13 @@
           drawerClip.inert = false;
         };
 
-        const closeDrawer = (reason = "manual") => {
+        const closeDrawer = (reason = "manual", lockHover = false) => {
           control.classList.remove("is-open");
           control.classList.add("is-closing");
           trigger.setAttribute("aria-expanded", "false");
           drawerClip.setAttribute("aria-hidden", "true");
           drawerClip.inert = true;
-          if (reason === "copied") hoverLocked = true;
+          if (reason === "copied") hoverLocked = lockHover;
           closingTimer = window.setTimeout(
             () => control.classList.remove("is-closing"),
             motionReduced.matches ? 0 : 640,
@@ -114,7 +114,8 @@
           }, 0);
         });
 
-        drawer.addEventListener("click", async () => {
+        drawer.addEventListener("click", async (event) => {
+          const shouldLockHover = event.pointerType === "mouse";
           try {
             await copyWithFallback();
             window.clearTimeout(resetTimer);
@@ -124,7 +125,10 @@
             drawer.classList.add("is-bouncing");
             copyLabel.textContent = "Copied!";
             copyStatus.textContent = `${email} copied to the clipboard.`;
-            window.setTimeout(() => closeDrawer("copied"), motionReduced.matches ? 250 : 700);
+            window.setTimeout(
+              () => closeDrawer("copied", shouldLockHover),
+              motionReduced.matches ? 250 : 700,
+            );
             resetTimer = window.setTimeout(() => {
               control.classList.remove("is-copied");
               drawer.classList.remove("is-bouncing");
