@@ -107,7 +107,10 @@
           }
         });
         trigger.addEventListener("focus", openDrawer);
-        trigger.addEventListener("click", openDrawer);
+        trigger.addEventListener("click", () => {
+          hoverLocked = false;
+          openDrawer();
+        });
         control.addEventListener("focusout", () => {
           window.setTimeout(() => {
             if (!control.contains(document.activeElement)) closeDrawer("focus-leave");
