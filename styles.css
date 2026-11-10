@@ -352,6 +352,8 @@ h1,
   pointer-events: none;
 }
 
+.contact-drawer--email:hover,
+.contact-drawer--email:focus-visible,
 .contact-drawer--linkedin:hover,
 .contact-drawer--linkedin:focus-visible {
   background: linear-gradient(180deg, rgb(248 250 255 / 64%) 0%, rgb(166 174 190 / 64%) 100%);

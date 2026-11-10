@@ -79,14 +79,12 @@
         const motionReduced = window.matchMedia("(prefers-reduced-motion: reduce)");
         let closingTimer;
         let resetTimer;
-        let hoverLocked = false;
 
         const clearClosingTimer = () => {
           window.clearTimeout(closingTimer);
         };
 
         const openDrawer = () => {
-          if (hoverLocked) return;
           clearClosingTimer();
           control.classList.remove("is-closing");
           control.classList.add("is-open");
@@ -95,13 +93,12 @@
           drawerClip.inert = false;
         };
 
-        const closeDrawer = (reason = "manual", lockHover = false) => {
+        const closeDrawer = () => {
           control.classList.remove("is-open");
           control.classList.add("is-closing");
           trigger.setAttribute("aria-expanded", "false");
           drawerClip.setAttribute("aria-hidden", "true");
           drawerClip.inert = true;
-          if (reason === "copied") hoverLocked = lockHover;
           closingTimer = window.setTimeout(
             () => control.classList.remove("is-closing"),
             motionReduced.matches ? 0 : 640,
@@ -124,13 +121,12 @@
         };
 
         trigger.addEventListener("pointerenter", (event) => {
-          if (event.pointerType === "mouse" && !hoverLocked) openDrawer();
+          if (event.pointerType === "mouse") openDrawer();
         });
         control.addEventListener("pointerleave", (event) => {
           if (event.pointerType !== "mouse") return;
-          hoverLocked = false;
           if (control.classList.contains("is-open")) {
-            closeDrawer("hover-leave");
+            closeDrawer();
           }
         });
         trigger.addEventListener("focus", () => {
@@ -138,21 +134,18 @@
         });
         trigger.addEventListener("click", () => {
           if (control.classList.contains("is-open")) {
-            hoverLocked = false;
-            closeDrawer("dismiss");
+            closeDrawer();
             return;
           }
-          hoverLocked = false;
           openDrawer();
         });
         control.addEventListener("focusout", () => {
           window.setTimeout(() => {
-            if (!control.contains(document.activeElement)) closeDrawer("focus-leave");
+            if (!control.contains(document.activeElement)) closeDrawer();
           }, 0);
         });
 
-        emailDrawer.addEventListener("click", async (event) => {
-          const shouldLockHover = event.pointerType === "mouse";
+        emailDrawer.addEventListener("click", async () => {
           try {
             await copyWithFallback();
             window.clearTimeout(resetTimer);
@@ -162,10 +155,6 @@
             emailDrawer.classList.add("is-bouncing");
             copyLabel.textContent = "Copied!";
             copyStatus.textContent = `${email} copied to the clipboard.`;
-            window.setTimeout(
-              () => closeDrawer("copied", shouldLockHover),
-              motionReduced.matches ? 250 : 700,
-            );
             resetTimer = window.setTimeout(() => {
               control.classList.remove("is-copied");
               emailDrawer.classList.remove("is-bouncing");
@@ -179,8 +168,7 @@
         document.addEventListener("pointerdown", (event) => {
           if (!control.classList.contains("is-open")) return;
           if (emailDrawer.contains(event.target) || linkedinDrawer.contains(event.target) || trigger.contains(event.target)) return;
-          hoverLocked = false;
-          closeDrawer("dismiss");
+          closeDrawer();
         });
 
         document.addEventListener("keydown", (event) => {
