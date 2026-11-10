@@ -14,6 +14,7 @@
   --selection: #0066ff;
   --selection-ink: #f9fafb;
   --spring: cubic-bezier(0.2, 1.32, 0.34, 1);
+  --rollover-ease: cubic-bezier(0.4, 0, 0.2, 1);
   font-family: "InterDisplay", "Inter", -apple-system, BlinkMacSystemFont,
     "Segoe UI", sans-serif;
   font-synthesis: none;
@@ -320,12 +321,28 @@ h1,
   letter-spacing: -0.01em;
   text-decoration: none;
   text-align: left;
+  isolation: isolate;
   transition:
-    background 420ms ease,
-    border-color 420ms ease,
-    box-shadow 420ms ease,
+    border-color 600ms var(--rollover-ease),
+    box-shadow 600ms var(--rollover-ease),
     width 280ms var(--spring),
     transform 180ms var(--spring);
+}
+
+.contact-drawer::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    180deg,
+    rgb(248 250 255 / 52.6316%) 0%,
+    rgb(166 174 190 / 52.6316%) 100%
+  );
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 600ms var(--rollover-ease);
 }
 
 .contact-drawer--email {
@@ -345,6 +362,7 @@ h1,
 
 .contact-drawer--linkedin::after {
   position: absolute;
+  z-index: 2;
   inset: -1px;
   border-radius: inherit;
   box-shadow: inset 0 0 0 1px rgb(166 174 190 / 56%);
@@ -356,7 +374,6 @@ h1,
 .contact-drawer--email:focus-visible,
 .contact-drawer--linkedin:hover,
 .contact-drawer--linkedin:focus-visible {
-  background: linear-gradient(180deg, rgb(248 250 255 / 64%) 0%, rgb(166 174 190 / 64%) 100%);
   box-shadow:
     0 18.75px 18.75px rgb(93 171 255 / 5%),
     0 8.75px 8.75px rgb(93 171 255 / 10%),
@@ -368,12 +385,20 @@ h1,
     inset 0 5px 5px rgb(255 255 255 / 16%);
 }
 
+.contact-drawer--email:hover::before,
+.contact-drawer--email:focus-visible::before,
+.contact-drawer--linkedin:hover::before,
+.contact-drawer--linkedin:focus-visible::before {
+  opacity: 1;
+}
+
 .contact-drawer:active {
   transform: scale(0.96);
 }
 
 .drawer-icon {
   position: relative;
+  z-index: 1;
   display: block;
   width: 2rem;
   height: 2rem;
@@ -424,6 +449,8 @@ h1,
 }
 
 .contact-drawer__content {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex: 0 0 auto;
   align-items: baseline;
@@ -467,6 +494,8 @@ h1,
 }
 
 .linkedin-label {
+  position: relative;
+  z-index: 1;
   flex: 0 0 auto;
   color: var(--button-ink);
   font-size: 0.9375rem;
@@ -568,7 +597,8 @@ h1,
   .contact-control,
   .contact-drawer-clip,
   .contact-drawer-list,
-  .contact-drawer {
+  .contact-drawer,
+  .contact-drawer::before {
     animation: none;
     transition-duration: 0.01ms;
   }
