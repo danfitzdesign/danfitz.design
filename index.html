@@ -14,52 +14,28 @@
   <body>
     <main class="introduction" aria-labelledby="name">
       <div class="introduction__content">
-        <div class="introduction__copy">
-          <div class="profile">
-            <div class="portrait" aria-hidden="true">
-              <img src="./assets/Dan.png" alt="" width="34" height="34" />
-            </div>
-            <header class="identity">
-              <h1 id="name">Dan Fitzsimmons</h1>
-              <p class="role">Leading Brand Design at GoCardless</p>
-            </header>
+        <div class="profile">
+          <div class="portrait" aria-hidden="true">
+            <img src="./assets/Dan.png" alt="" width="34" height="34" />
           </div>
-          <p class="bio">I specialise in building adaptable brand systems that help make complex ideas clear and compelling.</p>
+          <header class="identity">
+            <h1 id="name">Dan Fitzsimmons</h1>
+            <p class="role">Leading Brand Design at GoCardless</p>
+          </header>
         </div>
+        <p class="bio">I specialise in building adaptable brand systems that help make complex ideas<br />clear and compelling.</p>
 
         <div class="contact-control" data-contact>
           <button class="contact-trigger" type="button" aria-expanded="false" aria-controls="contact-drawer">
             <span>Contact</span>
           </button>
           <div class="contact-drawer-clip" id="contact-drawer" aria-hidden="true" inert>
-            <div class="contact-drawer-list">
-              <a
-                class="contact-drawer contact-drawer--linkedin"
-                href="https://www.linkedin.com/in/daniel-fitzsimmons-8666a831/"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Open Dan Fitzsimmons on LinkedIn in a new tab"
-              >
-                <span class="drawer-icon" aria-hidden="true">
-                  <img src="./assets/linkedin-icon.svg" alt="" width="42.6667" height="44.3495" />
-                </span>
-                <span class="linkedin-label">LinkedIn</span>
-                <span class="drawer-icon" aria-hidden="true">
-                  <img src="./assets/arrow-icon.svg" alt="" width="42.6667" height="44.3495" />
-                </span>
-              </a>
-              <button class="contact-drawer contact-drawer--email" type="button" aria-label="Copy dan@danfitz.design to the clipboard">
-                <span class="drawer-icon drawer-icon--mail" aria-hidden="true">
-                  <span class="mail-glyph">
-                    <img src="./assets/mail-icon.svg" alt="" width="21.0737" height="15.2202" />
-                  </span>
-                </span>
-                <span class="contact-drawer__content">
-                  <span class="contact-email">dan@danfitz.design</span>
-                  <span class="copy-label" aria-hidden="true">Copy</span>
-                </span>
-              </button>
-            </div>
+            <button class="contact-drawer" type="button" aria-label="Copy dan@danfitz.design to the clipboard">
+              <span class="contact-drawer__content">
+                <span class="contact-email">dan@danfitz.design</span>
+                <span class="copy-label" aria-hidden="true">Copy</span>
+              </span>
+            </button>
           </div>
           <p class="sr-only" aria-live="polite" data-copy-status></p>
         </div>
@@ -71,20 +47,21 @@
         const control = document.querySelector("[data-contact]");
         const trigger = control.querySelector(".contact-trigger");
         const drawerClip = control.querySelector(".contact-drawer-clip");
-        const emailDrawer = control.querySelector(".contact-drawer--email");
-        const linkedinDrawer = control.querySelector(".contact-drawer--linkedin");
+        const drawer = control.querySelector(".contact-drawer");
         const copyLabel = control.querySelector(".copy-label");
         const copyStatus = control.querySelector("[data-copy-status]");
         const email = "dan@danfitz.design";
         const motionReduced = window.matchMedia("(prefers-reduced-motion: reduce)");
         let closingTimer;
         let resetTimer;
+        let hoverLocked = false;
 
         const clearClosingTimer = () => {
           window.clearTimeout(closingTimer);
         };
 
         const openDrawer = () => {
+          if (hoverLocked) return;
           clearClosingTimer();
           control.classList.remove("is-closing");
           control.classList.add("is-open");
@@ -93,12 +70,13 @@
           drawerClip.inert = false;
         };
 
-        const closeDrawer = () => {
+        const closeDrawer = (reason = "manual", lockHover = false) => {
           control.classList.remove("is-open");
           control.classList.add("is-closing");
           trigger.setAttribute("aria-expanded", "false");
           drawerClip.setAttribute("aria-hidden", "true");
           drawerClip.inert = true;
+          if (reason === "copied") hoverLocked = lockHover;
           closingTimer = window.setTimeout(
             () => control.classList.remove("is-closing"),
             motionReduced.matches ? 0 : 640,
@@ -121,12 +99,13 @@
         };
 
         trigger.addEventListener("pointerenter", (event) => {
-          if (event.pointerType === "mouse") openDrawer();
+          if (event.pointerType === "mouse" && !hoverLocked) openDrawer();
         });
         control.addEventListener("pointerleave", (event) => {
           if (event.pointerType !== "mouse") return;
+          hoverLocked = false;
           if (control.classList.contains("is-open")) {
-            closeDrawer();
+            closeDrawer("hover-leave");
           }
         });
         trigger.addEventListener("focus", () => {
@@ -134,30 +113,37 @@
         });
         trigger.addEventListener("click", () => {
           if (control.classList.contains("is-open")) {
-            closeDrawer();
+            hoverLocked = false;
+            closeDrawer("dismiss");
             return;
           }
+          hoverLocked = false;
           openDrawer();
         });
         control.addEventListener("focusout", () => {
           window.setTimeout(() => {
-            if (!control.contains(document.activeElement)) closeDrawer();
+            if (!control.contains(document.activeElement)) closeDrawer("focus-leave");
           }, 0);
         });
 
-        emailDrawer.addEventListener("click", async () => {
+        drawer.addEventListener("click", async (event) => {
+          const shouldLockHover = event.pointerType === "mouse";
           try {
             await copyWithFallback();
             window.clearTimeout(resetTimer);
             control.classList.add("is-copied");
-            emailDrawer.classList.remove("is-bouncing");
-            void emailDrawer.offsetWidth;
-            emailDrawer.classList.add("is-bouncing");
+            drawer.classList.remove("is-bouncing");
+            void drawer.offsetWidth;
+            drawer.classList.add("is-bouncing");
             copyLabel.textContent = "Copied!";
             copyStatus.textContent = `${email} copied to the clipboard.`;
+            window.setTimeout(
+              () => closeDrawer("copied", shouldLockHover),
+              motionReduced.matches ? 250 : 700,
+            );
             resetTimer = window.setTimeout(() => {
               control.classList.remove("is-copied");
-              emailDrawer.classList.remove("is-bouncing");
+              drawer.classList.remove("is-bouncing");
               copyLabel.textContent = "Copy";
             }, motionReduced.matches ? 500 : 1450);
           } catch {
@@ -167,8 +153,9 @@
 
         document.addEventListener("pointerdown", (event) => {
           if (!control.classList.contains("is-open")) return;
-          if (emailDrawer.contains(event.target) || linkedinDrawer.contains(event.target) || trigger.contains(event.target)) return;
-          closeDrawer();
+          if (drawer.contains(event.target) || trigger.contains(event.target)) return;
+          hoverLocked = false;
+          closeDrawer("dismiss");
         });
 
         document.addEventListener("keydown", (event) => {
