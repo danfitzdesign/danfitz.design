@@ -14,28 +14,52 @@
   <body>
     <main class="introduction" aria-labelledby="name">
       <div class="introduction__content">
-        <div class="profile">
-          <div class="portrait" aria-hidden="true">
-            <img src="./assets/Dan.png" alt="" width="34" height="34" />
+        <div class="introduction__copy">
+          <div class="profile">
+            <div class="portrait" aria-hidden="true">
+              <img src="./assets/Dan.png" alt="" width="34" height="34" />
+            </div>
+            <header class="identity">
+              <h1 id="name">Dan Fitzsimmons</h1>
+              <p class="role">Leading Brand Design at GoCardless</p>
+            </header>
           </div>
-          <header class="identity">
-            <h1 id="name">Dan Fitzsimmons</h1>
-            <p class="role">Leading Brand Design at GoCardless</p>
-          </header>
+          <p class="bio">I specialise in building adaptable brand systems that help make complex ideas clear and compelling.</p>
         </div>
-        <p class="bio">I specialise in building adaptable brand systems that help make complex ideas<br />clear and compelling.</p>
 
         <div class="contact-control" data-contact>
           <button class="contact-trigger" type="button" aria-expanded="false" aria-controls="contact-drawer">
             <span>Contact</span>
           </button>
           <div class="contact-drawer-clip" id="contact-drawer" aria-hidden="true" inert>
-            <button class="contact-drawer" type="button" aria-label="Copy dan@danfitz.design to the clipboard">
-              <span class="contact-drawer__content">
-                <span class="contact-email">dan@danfitz.design</span>
-                <span class="copy-label" aria-hidden="true">Copy</span>
-              </span>
-            </button>
+            <div class="contact-drawer-list">
+              <button class="contact-drawer contact-drawer--email" type="button" aria-label="Copy dan@danfitz.design to the clipboard">
+                <span class="drawer-icon drawer-icon--mail" aria-hidden="true">
+                  <span class="mail-glyph">
+                    <img src="./assets/mail-icon.svg" alt="" width="14.3684" height="10.3774" />
+                  </span>
+                </span>
+                <span class="contact-drawer__content">
+                  <span class="contact-email">dan@danfitz.design</span>
+                  <span class="copy-label" aria-hidden="true">Copy</span>
+                </span>
+              </button>
+              <a
+                class="contact-drawer contact-drawer--linkedin"
+                href="https://www.linkedin.com/in/daniel-fitzsimmons-8666a831/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Open Dan Fitzsimmons on LinkedIn in a new tab"
+              >
+                <span class="drawer-icon" aria-hidden="true">
+                  <img src="./assets/linkedin-icon.svg" alt="" width="32" height="33.2622" />
+                </span>
+                <span class="linkedin-label">LinkedIn</span>
+                <span class="drawer-icon" aria-hidden="true">
+                  <img src="./assets/arrow-icon.svg" alt="" width="32" height="33.2622" />
+                </span>
+              </a>
+            </div>
           </div>
           <p class="sr-only" aria-live="polite" data-copy-status></p>
         </div>
@@ -47,7 +71,8 @@
         const control = document.querySelector("[data-contact]");
         const trigger = control.querySelector(".contact-trigger");
         const drawerClip = control.querySelector(".contact-drawer-clip");
-        const drawer = control.querySelector(".contact-drawer");
+        const emailDrawer = control.querySelector(".contact-drawer--email");
+        const linkedinDrawer = control.querySelector(".contact-drawer--linkedin");
         const copyLabel = control.querySelector(".copy-label");
         const copyStatus = control.querySelector("[data-copy-status]");
         const email = "dan@danfitz.design";
@@ -126,15 +151,15 @@
           }, 0);
         });
 
-        drawer.addEventListener("click", async (event) => {
+        emailDrawer.addEventListener("click", async (event) => {
           const shouldLockHover = event.pointerType === "mouse";
           try {
             await copyWithFallback();
             window.clearTimeout(resetTimer);
             control.classList.add("is-copied");
-            drawer.classList.remove("is-bouncing");
-            void drawer.offsetWidth;
-            drawer.classList.add("is-bouncing");
+            emailDrawer.classList.remove("is-bouncing");
+            void emailDrawer.offsetWidth;
+            emailDrawer.classList.add("is-bouncing");
             copyLabel.textContent = "Copied!";
             copyStatus.textContent = `${email} copied to the clipboard.`;
             window.setTimeout(
@@ -143,7 +168,7 @@
             );
             resetTimer = window.setTimeout(() => {
               control.classList.remove("is-copied");
-              drawer.classList.remove("is-bouncing");
+              emailDrawer.classList.remove("is-bouncing");
               copyLabel.textContent = "Copy";
             }, motionReduced.matches ? 500 : 1450);
           } catch {
@@ -153,7 +178,7 @@
 
         document.addEventListener("pointerdown", (event) => {
           if (!control.classList.contains("is-open")) return;
-          if (drawer.contains(event.target) || trigger.contains(event.target)) return;
+          if (emailDrawer.contains(event.target) || linkedinDrawer.contains(event.target) || trigger.contains(event.target)) return;
           hoverLocked = false;
           closeDrawer("dismiss");
         });
