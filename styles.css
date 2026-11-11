@@ -415,29 +415,14 @@ h1,
 .drawer-icon {
   position: relative;
   z-index: 1;
-  display: block;
+  display: flex;
   width: 2rem;
   height: 2rem;
   flex: 0 0 2rem;
-}
-
-.drawer-icon > img {
-  position: absolute;
-  top: -1.6829px;
-  left: -5.3333px;
-  display: block;
-  max-width: none;
-}
-
-.drawer-icon--mail {
-  display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 1.429px;
-  border: 0.467px solid #69bbff;
-  border-radius: 133.333px;
-  background: linear-gradient(180deg, #005dea 0%, #69bbff 100%);
+  border: 0.467px solid transparent;
+  border-radius: 50%;
   box-shadow:
     0 4px 4px rgb(93 171 255 / 5%),
     0 5.333px 5.333px rgb(93 171 255 / 8%),
@@ -447,6 +432,29 @@ h1,
     0 0 1.333px rgb(93 171 255 / 5%),
     inset 0.333px 0.667px 1.333px rgb(255 255 255 / 32%),
     inset 0 0.667px 1.333px rgb(255 255 255 / 16%);
+}
+
+.drawer-icon > img {
+  display: block;
+  max-width: none;
+}
+
+.drawer-icon--linkedin {
+  background:
+    linear-gradient(180deg, #005dea 0%, #69bbff 100%) padding-box,
+    linear-gradient(180deg, #69bbff 0%, #005dea 100%) border-box;
+}
+
+.drawer-icon--arrow {
+  background:
+    linear-gradient(180deg, #fafafa 0%, #e5e5e5 100%) padding-box,
+    linear-gradient(180deg, #d4d4d4 0%, rgb(163 163 163 / 50%) 100%) border-box;
+}
+
+.drawer-icon--mail {
+  padding: 1.429px;
+  border-color: #69bbff;
+  background: linear-gradient(180deg, #005dea 0%, #69bbff 100%);
 }
 
 .mail-glyph {
